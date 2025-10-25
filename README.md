@@ -15,7 +15,8 @@ This project requires the following Python packages:
 
 - **Flask**
 
-All dependencies can be installed using `requirements.txt`:
+Install the required dependency using the provided `requirements.txt`:
+(or, run the command below to install :P)
 
 ```bash
 pip install -r requirements.txt
