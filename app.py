@@ -7,7 +7,6 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 
 @app.route('/')
 def index():
-    message = "Hello from Flask!"
     # diagnostic info
     print("=== RUNNING APP ===")
     print("cwd:", os.getcwd())
