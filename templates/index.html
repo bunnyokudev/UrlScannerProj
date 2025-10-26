@@ -15,8 +15,84 @@
 
     <!-- Scanner portion -->
     <div style="background-color: rgba(73, 73, 73, 0.997); padding:40px; margin:10px; border-radius: 14px; text-align: center;">
-        <input id="LinkInput" />
-        <button class = "ScanButton" type="button">Scan</button>
+        <input id="LinkInput" placeholder="Enter URL to scan" />
+        <button class = "ScanButton" type="button" id="ScanButton">Scan</button>
+        <!-- Result display -->
+        <div id="scanResult" style="margin-top: 20px; color: white;"></div>
     </div>
+    <!--Script-->
+    <script>
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+document.getElementById('ScanButton').addEventListener('click', function () {
+    const urlInput = document.getElementById('LinkInput').value.trim();
+    const resultDiv = document.getElementById('scanResult');
+
+    // Clear previous results
+    resultDiv.textContent = '';
+
+    if (!urlInput) {
+        resultDiv.textContent = 'Please enter a URL.';
+        resultDiv.style.color = 'white';
+        return;
+    }
+
+
+    if (!isValidUrl(urlInput)) {
+        resultDiv.textContent = 'Please enter a valid URL';
+        resultDiv.style.color = 'white';
+        return;
+    }
+
+    // Show loading icon animation
+    let dots = 0;
+    resultDiv.style.color = 'white';
+    const loadingInterval = setInterval(() =>{
+        dots = (dots + 1) % 4; 
+        resultDiv.textContent = 'Scanning'+'.'.repeat(dots);
+    },500);
+
+    // Send POST to backend
+    fetch('/scan_url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urlInput })
+    })
+    .then(response => {
+        if (!response.ok) return response.json().then(err => Promise.reject(err));
+        return response.json();
+    })
+    .then(data => {
+    clearInterval(loadingInterval); //stops loading animation
+
+    if (data.error) {
+        resultDiv.textContent = 'Error: ' + data.error;
+        resultDiv.style.color = 'white'; // keep errors visible
+    } else if (data.result === 'SAFE') {
+        resultDiv.textContent = 'SAFE ✅';
+        resultDiv.style.color = 'limegreen'; // green for safe
+    } else if (data.result === 'UNSAFE') {
+        resultDiv.textContent = 'UNSAFE ❌' + (data.reason ? ' — ' + data.reason : '');
+        resultDiv.style.color = 'red'; // red for unsafe
+    } else {
+        resultDiv.textContent = JSON.stringify(data);
+        resultDiv.style.color = 'white'; // fallback
+    }
+})
+    .catch(err => {
+        clearInterval(loadingInterval);
+        console.error('Scan error:', err);
+        const message = err && err.error ? err.error : 'An error occurred while scanning.';
+        resultDiv.textContent = message;
+    });
+});
+</script>
 </body>
 </html>
