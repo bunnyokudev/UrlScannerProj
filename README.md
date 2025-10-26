@@ -14,6 +14,7 @@ A simple web application built with **Flask** that allows users to scan websites
 This project requires the following Python packages:
 
 - **Flask**
+- **requests**
 
 Install the required dependency using the provided `requirements.txt`:
 (or, run the command below to install :P)
