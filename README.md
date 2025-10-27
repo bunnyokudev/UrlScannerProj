@@ -1,13 +1,16 @@
 # URL Scanner
 
-A simple web application built with **Flask** that allows users to scan websites for potential malicious activity. This project was made for Maryville University's 1st Hackathon.
+A simple web application built with **Flask** that allows users to scan websites for potential malicious activity. This project was made in 3 days for Maryville University's 1st Hackathon.
 
 
 ## Features
 
 - User-friendly web interface.
-- Input a URL and click "Scan" (functionality to be implemented).
+- Input a URL and click "Scan".
 - Simple and clean design with a responsive layout.
+
+## Future Plans
+I plan to add more features and better methods of detection as I pursue my education in Cybersecurity and learn more skills.
 
 ## Dependencies
 
